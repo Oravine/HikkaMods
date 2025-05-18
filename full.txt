@@ -1,4 +1,5 @@
 EVOAssistant
 MoneyEVO
+EVOTimeBoss
 LoadHelper
 Smile
