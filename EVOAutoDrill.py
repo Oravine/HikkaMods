@@ -14,6 +14,7 @@
 #┃╰━╯┃┃┃╱┃╭╮┣╮╭╯┃┃┃┃┃┃┃┃━┫
 #╰━━━╯╰╯╱╰╯╰╯╰╯╱╰╯╰╯╰╯╰━━╯
 
+import asyncio
 from hikkatl.types import Message
 from hikkatl.tl.functions.messages import GetBotCallbackAnswerRequest
 from hikkatl.tl.types import KeyboardButtonCallback
