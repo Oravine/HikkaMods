@@ -19,14 +19,16 @@ from .. import loader, utils
 from ..inline.types import InlineCall
 @loader.tds
 class EVOAssistant(loader.Module):
-	"""Модуль ассистент для бота @Mine_EVO_Bot. В этом модуле содержится много полезной информации по этому боту."""
+	"""Модуль ассистент для бота @Mine_EVO_Bot. В этом модуле содержится много полезной информации по этому боту.
+	
+Разработчик: @OravineMods"""
 	
 #meta developer: @OravineMods
-	version = (2_0_0)
+	version = (3_0_0)
 		
 	strings = {
 		'name': 'EVOAssistant',
-		'menu': '<b>Главное меню</b>\n\nНажмите <i>Открыть список</i>, чтобы посмотреть сокращения денег.\n\n<blockquote><i>Разработанно: @OravineMods</i></blockquote>',
+		'menu': '<b>Главное меню</b>\n\nНажмите <i>💸 Сокращения денег</i>, чтобы посмотреть сокращения денег.\nНажмите <i>🎈 Список ивентов</i>, чтобы посмотреть список всех ивентов .Нажмите <i>🏰 Кланы</i>, чтобы посмотреть информацию о кланах. \n\n<blockquote><i>Разработанно: @OravineMods</i></blockquote>',
 		'list': '<b>💸 Список сокращений денег</b>\nНа кнопках в столбик написаны сокращения. Они идут от меньшего к большему, по столбцам, т. е. сверху вниз, слева направо.',
 		'K': '<b>Сокращение: </b><code>K</code><b>\nСумма: </b><code>Тысяча</code>\n<b>Написание:</b> <code>K</code> / <code>к</code>\n\n<i>Нажмите назад, чтобы вернуться к списку.</i>',
 		'M': '<b>Сокращение: </b><code>M</code><b>\nСумма: </b><code>Миллион</code>\n<b>Написание:</b> <code>M</code> / <code>м</code> / <code>кк</code>\n\n<i>Нажмите назад, чтобы вернуться к списку.</i>',
@@ -47,7 +49,7 @@ class EVOAssistant(loader.Module):
 	async def menu(self, call):
 		await call.edit(
 			text = self.strings['menu'],
-			reply_markup=[[{'text': '💸 Сокращения денег', 'callback': self.mlist}],[{'text': '🎈 Список ивентов', 'callback': self.evlist}],[{'text': '❌ Закрыть', "action": "close"}]])
+			reply_markup=[[{'text': '💸 Сокращения денег', 'callback': self.mlist}],[{'text': '🎈 Список ивентов', 'callback': self.evlist}],[{'text': '🏰 Кланы', 'callback': self.clmenu}],[{'text': '❌ Закрыть', "action": "close"}]])
 			
 	@loader.command()
 	async def eamenu(self, message):
@@ -55,7 +57,7 @@ class EVOAssistant(loader.Module):
 		await self.inline.form(
 			message=message,
 			text = self.strings['menu'],
-			reply_markup=[[{'text': '💸 Сокращения денег', 'callback': self.mlist}],[{'text': '🎈 Список ивентов', 'callback': self.evlist}],[{'text': '❌ Закрыть', "action": "close"}]])
+			reply_markup=[[{'text': '💸 Сокращения денег', 'callback': self.mlist}],[{'text': '🎈 Список ивентов', 'callback': self.evlist}],[{'text': '🏰 Кланы', 'callback': self.clmenu}],[{'text': '❌ Закрыть', "action": "close"}]])
 	
 			#Главное меню конец
 			
@@ -170,3 +172,64 @@ class EVOAssistant(loader.Module):
 			reply_markup=[{'text': '🔙 Назад', 'callback': self.evlist}])
 			
 			#Раздел ивенты конец
+			
+			#Раздел кланы начало
+			
+	cl = {
+		'menu': '<b>🏰 Кланы</b>\n\nЗдесь есть информация о создании, прокачке и бонусах клана. Выберите нужный раздел.',
+		'lvlmenu': '<b>🏰 Кланы</b>\n\nЗдесь есть информация об уровнях клана. Выберите нужный уровень.',
+		'cr': '<b>Создать клан</b>\n\n<blockquote><b>Стоимость создания:</b>\n<i>⭐ Уровень:</i> <code>50</code>\n<i>🎆 Плазма:</i> <code>25,000</code></blockquote>',
+		'lvl1': '<b>Уровень:</b> <code>1</code>\n<b>Иконка:</b> <code>⛺</code>\n<b>Стоимость прокачки:</b>\n<i>Нет</i>\n<b>Бонусы:</b>\n<blockquote><i>🔥 Множ. руды:</i> <code>×1.25</code>\n<i>☘ Шк:</i> <code>+0.1</code>\n<i>🚩 Макс. боссов:</i> <code>0</code>\n<i>🛡 Щит:</i> <code>Нет</code>\n<i>👥 Участники:</i> <code>10</code></blockquote>',
+		'lvl2': '<b>Уровень:</b> <code>2</code>\n<b>Иконка:</b> <code>🛖</code>\n<b>Стоимость прокачки:</b>\n<blockquote><i>🎆 Плазма:</i> <code>1,500,000</code>\n<i>📜 Эскиз:</i> <code>100</code>\n<i>🏅 Очки клана: </i><code>500</code></blockquote>\n<b>Бонусы:</b>\n<blockquote><i>🔥 Множ. руды:</i> <code>×1.5</code>\n<i>☘ Шк:</i> <code>+0.2</code>\n<i>🚩 Макс. боссов:</i> <code>1</code>\n<i>🛡 Щит:</i> <code>1 день</code>\n<i>👥 Участники:</i> <code>20</code></blockquote>',
+		'lvl3': '<b>Уровень:</b> <code>3</code>\n<b>Иконка:</b> <code>🏠</code>\n<b>Стоимость прокачки:</b>\n<blockquote><i>🎆 Плазма:</i> <code>5,000,000</code>\n<i>📜 Эскиз:</i> <code>500</code>\n<i>🔩 Скрап:</i> <code>150</code>\n<i>🏅 Очки клана: </i><code>2,500</code></blockquote>\n<b>Бонусы:</b>\n<blockquote><i>🔥 Множ. руды:</i> <code>×1.75</code>\n<i>☘ Шк:</i> <code>+0.3</code>\n<i>🚩 Макс. боссов:</i> <code>2</code>\n<i>🛡 Щит:</i> <code>1 день</code>\n<i>👥 Участники:</i> <code>30</code></blockquote>',
+		'lvl4': '<b>Уровень:</b> <code>4</code>\n<b>Иконка:</b> <code>🏘</code>\n<b>Стоимость прокачки:</b>\n<blockquote><i>🎆 Плазма:</i> <code>15,000,000</code>\n<i>📜 Эскиз:</i> <code>1,500</code>\n<i>🌀 Эссенсия:</i> <code>150</code>\n<i>🔩 Скрап:</i> <code>1,200</code>\n<i>🏅 Очки клана: </i><code>12,500</code></blockquote>\n<b>Бонусы:</b>\n<blockquote><i>🔥 Множ. руды:</i> <code>×2</code>\n<i>☘ Шк:</i> <code>+0.4</code>\n<i>🚩 Макс. боссов:</i> <code>2</code>\n<i>🛡 Щит:</i> <code>2 дня</code>\n<i>👥 Участники:</i> <code>40</code></blockquote>',
+		'lvl5': '<b>Уровень:</b> <code>5</code>\n<b>Иконка:</b> <code>🏰</code>\n<b>Стоимость прокачки:</b>\n<blockquote><i>🎆 Плазма:</i> <code>30,000,000</code>\n<i>📜 Эскиз:</i> <code>4,500</code>\n<i>🌀 Эссенсия:</i> <code>600</code>\n<i>🔩 Скрап:</i> <code>9,600</code>\n<i>🌌 Зв. пыль:</i> <code>5</code>\n<i>🏅 Очки клана: </i><code>50,000</code></blockquote>\n<b>Бонусы:</b>\n<blockquote><i>🔥 Множ. руды:</i> <code>×3</code>\n<i>☘ Шк:</i> <code>+0.5</code>\n<i>🚩 Макс. боссов:</i> <code>3</code>\n<i>🛡 Щит:</i> <code>2 дня</code>\n<i>👥 Участники:</i> <code>50</code></blockquote>',
+		'lvl6': '<b>Уровень:</b> <code>6</code>\n<b>Иконка:</b> <code>🏯</code>\n<b>Стоимость прокачки:</b>\n<blockquote><i>🎆 Плазма:</i> <code>100,000,000</code>\n<i>🌌 Зв. пыль:</i> <code>30</code>\n<i>🏅 Очки клана: </i><code>100,000</code></blockquote>\n<b>Бонусы:</b>\n<blockquote><i>🔥 Множ. руды:</i> <code>×4</code>\n<i>☘ Шк:</i> <code>+0.55</code>\n<i>🚩 Макс. боссов:</i> <code>3</code>\n<i>🛡 Щит:</i> <code>3 дня</code>\n<i>👥 Участники:</i> <code>55</code></blockquote>'
+	}
+	
+	async def clmenu(self, call):
+		await call.edit(
+			text = self.cl['menu'],
+			reply_markup=[[{'text': 'Создание клана', 'callback': self.cr},{'text': 'Уровни клана', 'callback': self.lvlmenu}],[{'text': '🔙 В меню', 'callback': self.menu}]])
+			
+	async def lvlmenu(self, call):
+		await call.edit(
+			text = self.cl['lvlmenu'],
+			reply_markup=[[{'text': '1', 'callback': self.lvl1},{'text': '2', 'callback': self.lvl2},{'text': '3', 'callback': self.lvl3},{'text': '4', 'callback': self.lvl4},{'text': '5', 'callback': self.lvl5},{'text': '6', 'callback': self.lvl6}],[{'text': '🔙 Назад', 'callback': self.clmenu}]])
+			
+	async def cr(self, call):
+		await call.edit(
+			text = self.cl['cr'],
+			reply_markup=[{'text': '🔙 Назад', 'callback': self.clmenu}])
+	
+	async def lvl1(self, call):
+		await call.edit(
+			text = self.cl['lvl1'],
+			reply_markup=[{'text': '🔙 Назад', 'callback': self.lvlmenu}])
+			
+	async def lvl2(self, call):
+		await call.edit(
+			text = self.cl['lvl2'],
+			reply_markup=[{'text': '🔙 Назад', 'callback': self.lvlmenu}])
+			
+	async def lvl3(self, call):
+		await call.edit(
+			text = self.cl['lvl3'],
+			reply_markup=[{'text': '🔙 Назад', 'callback': self.lvlmenu}])
+			
+	async def lvl4(self, call):
+		await call.edit(
+			text = self.cl['lvl4'],
+			reply_markup=[{'text': '🔙 Назад', 'callback': self.lvlmenu}])
+			
+	async def lvl5(self, call):
+		await call.edit(
+			text = self.cl['lvl5'],
+			reply_markup=[{'text': '🔙 Назад', 'callback': self.lvlmenu}])
+			
+	async def lvl6(self, call):
+		await call.edit(
+			text = self.cl['lvl6'],
+			reply_markup=[{'text': '🔙 Назад', 'callback': self.lvlmenu}])
+	
+			#Раздел кланы конец
