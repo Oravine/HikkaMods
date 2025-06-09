@@ -24,7 +24,7 @@ class EVOAssistant(loader.Module):
 Разработчик: @OravineMods"""
 	
 #meta developer: @OravineMods
-	version = (4_0_0)
+	__version__ = (2,0,0)
 		
 	strings = {
 		'name': 'EVOAssistant',
