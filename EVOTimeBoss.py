@@ -23,6 +23,7 @@ from datetime import timedelta
 @loader.tds
 class EVOTimeBoss(loader.Module):
     """Напоминает о появлении боссов в боте @MineEVO.
+Настройте модуль через конфиг перед использованием! (.cfg EVOTimeBoss)
 
 Разработчик: @OravineMods"""
     
@@ -30,10 +31,10 @@ class EVOTimeBoss(loader.Module):
     
     strings = {
         "name": "EVOTimeBoss",
-        "active": "🔔 Напоминания о боссах включены",
-        "inactive": "🔕 Напоминания о боссах выключены",
-        "already_active": "⚠️ Напоминания уже включены",
-        "already_inactive": "⚠️ Напоминания уже выключены",
+        "active": "<blockquote>🔔 Напоминания о боссах включены</blockquote>",
+        "inactive": "<blockquote>🔕 Напоминания о боссах выключены</blockquote>",
+        "already_active": "<blockquote>⚠️ Напоминания уже включены</blockquote>",
+        "already_inactive": "<blockquote>⚠️ Напоминания уже выключены</blockquote>",
     }
 
     def __init__(self):
@@ -44,17 +45,17 @@ class EVOTimeBoss(loader.Module):
                 "reminder_time",
                 120,
                 "За сколько секунд предупреждать о боссе",
-                validator=loader.validators.Integer(minimum=10, maximum=300)),
+                validator=loader.validators.Integer(minimum=10, maximum=3600)),
         loader.ConfigValue(
                 "chat_id_send",
                 "me",
-                "В какой чат отправить сотбщение. Чтобы отправть в избранное - «me»"
+                "В какой чат отправить уведомление. Чтобы отправть в избранное - «me» (ID чата)"
         ),
         loader.ConfigValue(
                 "check_time",
                 60,
-                "Как часто проверять таймер боссов",
-                validator=loader.validators.Integer(minimum=10, maximum=300))
+                "Как часто проверять таймер боссов (секунды)",
+                validator=loader.validators.Integer(minimum=10))
         )
 
     async def client_ready(self, client, db):
@@ -80,7 +81,6 @@ class EVOTimeBoss(loader.Module):
         return total_seconds
 
     async def get_upcoming_bosses(self):
-        """Получает список боссов, которые появятся менее чем через 2 минуты"""
         try:
             async with self._client.conversation("@mineevo") as conv:
                 await conv.send_message("мбл")
@@ -132,7 +132,7 @@ class EVOTimeBoss(loader.Module):
 
     @loader.command()
     async def tbon(self, message: Message):
-        """Включить напоминания о боссах"""
+        """- 🔔 Включить напоминания о боссах"""
         if self.active:
             await utils.answer(message, self.strings("already_active"))
             return
@@ -143,7 +143,7 @@ class EVOTimeBoss(loader.Module):
 
     @loader.command()
     async def tboff(self, message: Message):
-        """Выключить напоминания о боссах"""
+        """- 🔕 Выключить напоминания о боссах"""
         if not self.active:
             await utils.answer(message, self.strings("already_inactive"))
             return
