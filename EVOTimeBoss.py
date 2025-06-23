@@ -28,6 +28,7 @@ class EVOTimeBoss(loader.Module):
 Разработчик: @OravineMods"""
     
 #meta developer: @OravineMods
+    __version__ = (1,0,0)
     
     strings = {
         "name": "EVOTimeBoss",
